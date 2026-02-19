@@ -1,0 +1,20 @@
+{
+  "name": "mini-game-web",
+  "private": true,
+  "packageManager": "pnpm@10.30.0",
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "scripts": {
+    "dev": "turbo run dev --parallel",
+    "build": "turbo run build",
+    "games:build": "turbo run build --filter=game-*",
+    "games:sync": "node scripts/sync-games.mjs",
+    "typecheck": "turbo run typecheck"
+  },
+  "devDependencies": {
+    "turbo": "^2.5.6",
+    "typescript": "^5.8.2"
+  }
+}

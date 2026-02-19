@@ -1,0 +1,11 @@
+{
+  "extends": "../../tsconfig.base.json",
+  "compilerOptions": {
+    "types": ["vite/client"],
+    "baseUrl": ".",
+    "paths": {
+      "@minigame/sdk": ["../../packages/sdk/src/index.ts"]
+    }
+  },
+  "include": ["src", "vite.config.ts"]
+}

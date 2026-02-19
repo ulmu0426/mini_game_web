@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Dodge</title>
+    <style>
+      html,
+      body {
+        margin: 0;
+        padding: 0;
+        background: #0f172a;
+        color: #e2e8f0;
+        font-family: Arial, sans-serif;
+      }
+
+      #app {
+        position: relative;
+        width: 100vw;
+        height: 100vh;
+        overflow: hidden;
+      }
+
+      #hud {
+        position: absolute;
+        inset: 0 auto auto 0;
+        display: flex;
+        gap: 12px;
+        align-items: center;
+        padding: 12px;
+        z-index: 2;
+        pointer-events: none;
+      }
+
+      .pill {
+        background: rgba(15, 23, 42, 0.7);
+        border: 1px solid rgba(148, 163, 184, 0.45);
+        border-radius: 999px;
+        padding: 6px 12px;
+        font-size: 14px;
+      }
+
+      #game-over {
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        transform: translate(-50%, -50%);
+        min-width: 240px;
+        background: rgba(15, 23, 42, 0.92);
+        border: 1px solid rgba(148, 163, 184, 0.45);
+        border-radius: 12px;
+        padding: 20px;
+        text-align: center;
+        display: none;
+        z-index: 3;
+      }
+
+      #restart-btn {
+        margin-top: 12px;
+        border: 0;
+        border-radius: 8px;
+        padding: 10px 14px;
+        font-weight: 700;
+        cursor: pointer;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="app">
+      <div id="hud">
+        <div class="pill" id="score">Score: 0</div>
+      </div>
+      <div id="game-over">
+        <h2>Game Over</h2>
+        <p id="final-score"></p>
+        <button id="restart-btn" type="button">Restart</button>
+      </div>
+    </div>
+    <script type="module" src="./assets/index.js"></script>
+  </body>
+</html>
