@@ -1,0 +1,77 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
+  <defs>
+    <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#d9f4ff"/>
+      <stop offset="55%" stop-color="#ebfbff"/>
+      <stop offset="100%" stop-color="#e8fadf"/>
+    </linearGradient>
+    <linearGradient id="hillA" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#afeec0"/>
+      <stop offset="100%" stop-color="#85d99a"/>
+    </linearGradient>
+    <linearGradient id="hillB" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#a6ebb0"/>
+      <stop offset="100%" stop-color="#7dd792"/>
+    </linearGradient>
+    <linearGradient id="boardSky" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#ffffff"/>
+      <stop offset="100%" stop-color="#f8fafc"/>
+    </linearGradient>
+    <filter id="softShadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="8" stdDeviation="8" flood-color="#0f172a" flood-opacity="0.18"/>
+    </filter>
+  </defs>
+
+  <rect width="1200" height="630" fill="url(#sky)"/>
+
+  <g fill="#ffffff" opacity="0.92">
+    <circle cx="180" cy="96" r="38"/>
+    <circle cx="220" cy="88" r="30"/>
+    <circle cx="252" cy="100" r="34"/>
+    <circle cx="920" cy="108" r="42"/>
+    <circle cx="965" cy="95" r="30"/>
+    <circle cx="1003" cy="113" r="34"/>
+  </g>
+
+  <path d="M-80,630 C110,430 290,420 460,630 Z" fill="url(#hillB)"/>
+  <path d="M260,630 C470,390 710,410 910,630 Z" fill="url(#hillA)"/>
+  <path d="M700,630 C860,470 1080,450 1260,630 Z" fill="url(#hillB)"/>
+
+  <g filter="url(#softShadow)">
+    <rect x="380" y="90" width="440" height="500" rx="24" fill="#ffe48c"/>
+    <rect x="392" y="102" width="416" height="476" rx="20" fill="#d99a3c"/>
+    <rect x="408" y="118" width="384" height="444" rx="16" fill="url(#boardSky)"/>
+  </g>
+
+  <g stroke="#cbd5e1" stroke-opacity="0.75">
+    <path d="M408 154H792M408 190H792M408 226H792M408 262H792M408 298H792M408 334H792M408 370H792M408 406H792M408 442H792M408 478H792M408 514H792"/>
+    <path d="M446 118V562M484 118V562M522 118V562M560 118V562M598 118V562M636 118V562M674 118V562M712 118V562M750 118V562"/>
+  </g>
+
+  <g fill="#f97316">
+    <rect x="448" y="490" width="36" height="36" rx="8"/>
+    <rect x="486" y="490" width="36" height="36" rx="8"/>
+    <rect x="524" y="490" width="36" height="36" rx="8"/>
+    <rect x="562" y="490" width="36" height="36" rx="8"/>
+  </g>
+  <g fill="#22c55e">
+    <rect x="600" y="454" width="36" height="36" rx="8"/>
+    <rect x="638" y="454" width="36" height="36" rx="8"/>
+    <rect x="600" y="490" width="36" height="36" rx="8"/>
+    <rect x="638" y="490" width="36" height="36" rx="8"/>
+  </g>
+  <g fill="#38bdf8">
+    <rect x="676" y="418" width="36" height="36" rx="8"/>
+    <rect x="676" y="454" width="36" height="36" rx="8"/>
+    <rect x="676" y="490" width="36" height="36" rx="8"/>
+    <rect x="714" y="490" width="36" height="36" rx="8"/>
+  </g>
+  <g fill="#f43f5e">
+    <rect x="448" y="526" width="36" height="36" rx="8"/>
+    <rect x="486" y="526" width="36" height="36" rx="8"/>
+    <rect x="524" y="526" width="36" height="36" rx="8"/>
+  </g>
+
+  <text x="600" y="72" text-anchor="middle" font-family="Arial, sans-serif" font-size="78" font-weight="900" fill="#0f172a" opacity="0.22">TETRIS</text>
+  <text x="600" y="66" text-anchor="middle" font-family="Arial, sans-serif" font-size="78" font-weight="900" fill="#ffffff">TETRIS</text>
+</svg>

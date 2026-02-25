@@ -1,0 +1,283 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Make Ten</title>
+    <style>
+      html,
+      body {
+        margin: 0;
+        padding: 0;
+        background: #0f172a;
+        color: #e2e8f0;
+        font-family: Arial, sans-serif;
+        width: 100%;
+        height: 100%;
+        overflow: hidden;
+      }
+
+      #app {
+        width: 100%;
+        height: 100dvh;
+        display: flex;
+        flex-direction: column;
+        overflow: hidden;
+        position: relative;
+      }
+
+      #hud {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        padding: 12px;
+        align-items: center;
+      }
+
+      #stats-row {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        align-items: center;
+      }
+
+      .pill {
+        border: 1px solid rgba(148, 163, 184, 0.4);
+        background: rgba(15, 23, 42, 0.7);
+        border-radius: 999px;
+        padding: 6px 12px;
+        font-size: 14px;
+      }
+
+      #start-btn {
+        cursor: pointer;
+        font-weight: 700;
+        border: 1px solid #f8fafc;
+        background: linear-gradient(135deg, #f59e0b, #f97316);
+        color: #0f172a;
+        box-shadow: 0 0 0 2px rgba(2, 6, 23, 0.9), 0 8px 20px rgba(249, 115, 22, 0.35);
+        padding: 8px 16px;
+        font-size: 15px;
+      }
+
+      #start-btn:hover {
+        filter: brightness(1.05);
+      }
+
+      #right-tools {
+        margin-left: auto;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+
+      #shake-toggle-btn {
+        padding: 6px 12px;
+        border: 1px solid rgba(148, 163, 184, 0.45);
+        border-radius: 999px;
+        background: rgba(15, 23, 42, 0.78);
+        font-size: 13px;
+        color: #e2e8f0;
+        cursor: pointer;
+      }
+
+      #shake-toggle-btn[data-on="true"] {
+        border-color: #34d399;
+        box-shadow: 0 0 0 1px rgba(52, 211, 153, 0.35) inset;
+      }
+
+      .timer-pill {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+
+      .timer-label {
+        font-weight: 700;
+        letter-spacing: 0.2px;
+      }
+
+      #time-track {
+        width: 170px;
+        height: 8px;
+        border-radius: 999px;
+        background: rgba(51, 65, 85, 0.8);
+        overflow: hidden;
+      }
+
+      #time-fill {
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(90deg, #34d399, #f59e0b, #ef4444);
+        transform-origin: left center;
+      }
+
+      #board-wrap {
+        flex: 1;
+        min-height: 0;
+        display: grid;
+        place-items: center;
+        padding: 8px 12px 14px;
+      }
+
+      #board {
+        display: block;
+        box-sizing: border-box;
+        border: 1px solid rgba(148, 163, 184, 0.4);
+        border-radius: 10px;
+        background: #020617;
+      }
+
+      #audio-fab {
+        position: absolute;
+        right: 14px;
+        bottom: 14px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 42px;
+        height: 42px;
+        z-index: 6;
+        border: none;
+        overflow: visible;
+      }
+
+      #bgm-toggle-btn {
+        width: 34px;
+        height: 34px;
+        border-radius: 999px;
+        border: 1px solid rgba(148, 163, 184, 0.45);
+        background: rgba(15, 23, 42, 0.9);
+        color: #e2e8f0;
+        font-size: 16px;
+        line-height: 1;
+        cursor: pointer;
+      }
+
+      #bgm-toggle-btn[data-on="true"] {
+        border-color: #22c55e;
+        box-shadow: 0 0 0 1px rgba(34, 197, 94, 0.35) inset;
+      }
+
+      #bgm-volume-wrap {
+        position: absolute;
+        left: 50%;
+        bottom: 42px;
+        padding: 8px 6px;
+        border: 1px solid rgba(148, 163, 184, 0.45);
+        border-radius: 10px;
+        background: rgba(15, 23, 42, 0.9);
+        opacity: 0;
+        pointer-events: none;
+        transform: translate(-50%, 6px);
+        transition: opacity 0.15s ease, transform 0.15s ease;
+      }
+
+      #audio-fab::before {
+        content: "";
+        position: absolute;
+        right: 0;
+        bottom: 42px;
+        width: 42px;
+        height: 10px;
+      }
+
+      #audio-fab:hover #bgm-volume-wrap,
+      #audio-fab:focus-within #bgm-volume-wrap {
+        opacity: 1;
+        pointer-events: auto;
+        transform: translate(-50%, 0);
+      }
+
+      #bgm-volume {
+        width: 10px;
+        height: 74px;
+        accent-color: #22c55e;
+        writing-mode: bt-lr;
+        -webkit-appearance: slider-vertical;
+      }
+
+      #countdown-overlay {
+        position: fixed;
+        inset: 0;
+        display: none;
+        place-items: center;
+        background: rgba(2, 6, 23, 0.45);
+        z-index: 4;
+      }
+
+      #countdown-text {
+        font-size: clamp(56px, 16vw, 140px);
+        font-weight: 800;
+        color: #f8fafc;
+        text-shadow: 0 6px 24px rgba(15, 23, 42, 0.7);
+      }
+
+      #game-over {
+        position: fixed;
+        left: 50%;
+        top: 50%;
+        transform: translate(-50%, -50%);
+        padding: 20px;
+        border: 1px solid rgba(148, 163, 184, 0.5);
+        background: rgba(15, 23, 42, 0.95);
+        border-radius: 12px;
+        text-align: center;
+        z-index: 3;
+        display: none;
+        min-width: 220px;
+      }
+
+      #restart-btn {
+        margin-top: 12px;
+        border: 0;
+        border-radius: 8px;
+        padding: 10px 14px;
+        cursor: pointer;
+        font-weight: 700;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="app">
+      <div id="hud">
+        <button class="pill" id="start-btn" type="button">Start</button>
+        <div id="stats-row">
+          <div class="pill" id="score">Score: 0</div>
+          <div class="pill timer-pill">
+            <span class="timer-label">Time</span>
+            <div id="time-track"><div id="time-fill"></div></div>
+            <span id="timer">100.00s</span>
+          </div>
+          <div class="pill" id="combo">Max Combo: 0</div>
+          <div class="pill" id="combo-bonus">Combo Bonus: 0</div>
+        </div>
+        <div id="right-tools">
+          <button id="shake-toggle-btn" type="button" data-on="true">Screen Shake: ON</button>
+        </div>
+        <div class="pill" id="status" style="display: none">Press Start</div>
+      </div>
+      <div id="board-wrap">
+        <canvas id="board" width="900" height="1100"></canvas>
+      </div>
+
+      <div id="audio-fab">
+        <button id="bgm-toggle-btn" type="button" data-on="true" aria-label="Toggle BGM">&#128266;</button>
+        <div id="bgm-volume-wrap">
+          <input id="bgm-volume" type="range" min="0" max="100" step="1" value="55" />
+        </div>
+      </div>
+    </div>
+
+    <div id="countdown-overlay">
+      <div id="countdown-text">3</div>
+    </div>
+
+    <div id="game-over">
+      <h2>Game Over</h2>
+      <p id="final-score"></p>
+      <button id="restart-btn" type="button">Restart</button>
+    </div>
+    <script type="module" src="./assets/index.js"></script>
+  </body>
+</html>

@@ -20,6 +20,29 @@ export function GameFrame({ slug }: { slug: string }) {
     return process.env.NODE_ENV === "development" ? game.devUrl : game.iframePath;
   }, [game]);
 
+  const allowedOrigins = useMemo(() => {
+    if (!game) {
+      return [];
+    }
+    if (process.env.NODE_ENV === "development") {
+      const urls = [game.devUrl, "http://localhost:5173", "http://localhost:5174"];
+      return Array.from(
+        new Set(
+          urls
+            .map((entry) => {
+              try {
+                return new URL(entry).origin;
+              } catch {
+                return null;
+              }
+            })
+            .filter((v): v is string => !!v)
+        )
+      );
+    }
+    return [window.location.origin];
+  }, [game]);
+
   useEffect(() => {
     const key = getBestKey(slug);
     const raw = localStorage.getItem(key);
@@ -43,11 +66,9 @@ export function GameFrame({ slug }: { slug: string }) {
       return;
     }
 
-    const allowedOrigins =
-      process.env.NODE_ENV === "development"
-        ? ["http://localhost:5173"]
-        : [window.location.origin];
-
+    if (allowedOrigins.length === 0) {
+      return;
+    }
     const messenger = createHubMessenger(iframeRef.current, allowedOrigins);
 
     messenger.onReady(() => {
@@ -73,7 +94,7 @@ export function GameFrame({ slug }: { slug: string }) {
     });
 
     return () => messenger.dispose();
-  }, [slug]);
+  }, [allowedOrigins, slug]);
 
   if (!game) {
     return <p>게임 메타를 찾을 수 없습니다.</p>;
@@ -102,6 +123,7 @@ export function GameFrame({ slug }: { slug: string }) {
           src={src}
           allow="autoplay; fullscreen; gamepad"
           sandbox="allow-scripts allow-same-origin"
+          referrerPolicy="no-referrer"
         />
       </div>
     </section>

@@ -1,0 +1,31 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="640" height="360" viewBox="0 0 640 360" role="img" aria-label="Make Ten Grid thumbnail">
+  <defs>
+    <linearGradient id="bg" x1="0" x2="1" y1="0" y2="1">
+      <stop offset="0%" stop-color="#0f172a" />
+      <stop offset="100%" stop-color="#1e293b" />
+    </linearGradient>
+  </defs>
+  <rect width="640" height="360" fill="url(#bg)" />
+  <g transform="translate(120 50)">
+    <rect x="0" y="0" width="400" height="260" rx="12" fill="#020617" stroke="#475569" />
+    <g fill="#334155" font-family="Arial, sans-serif" font-size="18" text-anchor="middle">
+      <text x="50" y="48">3</text>
+      <text x="130" y="48">6</text>
+      <text x="210" y="48">1</text>
+      <text x="290" y="48">4</text>
+      <text x="370" y="48">2</text>
+      <text x="50" y="120">7</text>
+      <text x="130" y="120">2</text>
+      <text x="210" y="120">5</text>
+      <text x="290" y="120">3</text>
+      <text x="370" y="120">1</text>
+      <text x="50" y="192">8</text>
+      <text x="130" y="192">1</text>
+      <text x="210" y="192">9</text>
+      <text x="290" y="192">2</text>
+      <text x="370" y="192">4</text>
+    </g>
+    <rect x="80" y="78" width="160" height="88" fill="none" stroke="#f8fafc" stroke-width="4" />
+    <text x="200" y="232" fill="#e2e8f0" font-family="Arial, sans-serif" font-size="22" text-anchor="middle">Make Sum 10</text>
+  </g>
+</svg>

@@ -9,6 +9,16 @@ const games = [
     slug: "dodge",
     src: path.join(rootDir, "apps", "game-dodge", "dist"),
     dest: path.join(rootDir, "apps", "hub", "public", "games", "dodge")
+  },
+  {
+    slug: "tetris",
+    src: path.join(rootDir, "apps", "game-tetris", "dist"),
+    dest: path.join(rootDir, "apps", "hub", "public", "games", "tetris")
+  },
+  {
+    slug: "ten",
+    src: path.join(rootDir, "apps", "game-ten", "dist"),
+    dest: path.join(rootDir, "apps", "hub", "public", "games", "ten")
   }
 ];
 
