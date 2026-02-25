@@ -1,0 +1,294 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Tetris</title>
+    <style>
+      html,
+      body {
+        margin: 0;
+        padding: 0;
+        background: #dff6ff;
+        color: #1e293b;
+        font-family: Arial, sans-serif;
+        width: 100%;
+        height: 100%;
+        overflow: hidden;
+      }
+
+      #app {
+        width: 100vw;
+        height: 100dvh;
+        min-height: 100vh;
+        position: relative;
+        overflow: hidden;
+        background:
+          radial-gradient(circle at 15% 15%, rgba(255, 255, 255, 0.95) 0 28px, transparent 29px),
+          radial-gradient(circle at 19% 14%, rgba(255, 255, 255, 0.95) 0 22px, transparent 23px),
+          radial-gradient(circle at 23% 16%, rgba(255, 255, 255, 0.95) 0 24px, transparent 25px),
+          radial-gradient(circle at 77% 17%, rgba(255, 255, 255, 0.95) 0 30px, transparent 31px),
+          radial-gradient(circle at 81% 15%, rgba(255, 255, 255, 0.95) 0 21px, transparent 22px),
+          radial-gradient(circle at 85% 18%, rgba(255, 255, 255, 0.95) 0 24px, transparent 25px),
+          radial-gradient(circle at 72% 9%, rgba(255, 255, 255, 0.9) 0 3px, transparent 4px),
+          radial-gradient(circle at 89% 22%, rgba(255, 250, 190, 0.92) 0 3px, transparent 4px),
+          linear-gradient(180deg, #d9f4ff 0%, #ebfbff 56%, #e8fadf 100%);
+      }
+
+      #app::before {
+        content: "";
+        position: absolute;
+        inset: auto -8% -14% -8%;
+        height: 42%;
+        background:
+          radial-gradient(85% 100% at 15% 100%, #a6ebb0 0%, #7dd792 58%, transparent 59%),
+          radial-gradient(90% 105% at 82% 100%, #afeec0 0%, #85d99a 60%, transparent 61%);
+        pointer-events: none;
+        z-index: 0;
+      }
+
+      #app::after {
+        content: none;
+      }
+
+      #app .hill-mid {
+        position: absolute;
+        inset: auto 18% -15% 18%;
+        height: 37%;
+        border-radius: 999px;
+        background:
+          radial-gradient(90% 100% at 50% 100%, #afeec0 0%, #85d99a 61%, transparent 62%);
+        opacity: 0.95;
+        pointer-events: none;
+        z-index: 0;
+      }
+
+      #app canvas {
+        position: relative;
+        z-index: 2;
+      }
+
+      #hud {
+        position: absolute;
+        top: 12px;
+        left: 12px;
+        z-index: 3;
+        display: flex;
+        gap: 10px;
+      }
+
+      .pill {
+        border: 1px solid rgba(148, 163, 184, 0.45);
+        background: rgba(255, 255, 255, 0.9);
+        border-radius: 999px;
+        padding: 6px 12px;
+        font-size: 14px;
+        color: #0f172a;
+      }
+
+      #start-btn,
+      #difficulty {
+        border: 1px solid rgba(148, 163, 184, 0.55);
+        background: rgba(255, 255, 255, 0.96);
+        color: #0f172a;
+        border-radius: 8px;
+        padding: 6px 10px;
+        font-size: 14px;
+      }
+
+      #start-btn {
+        cursor: pointer;
+        font-weight: 700;
+      }
+
+      #audio-fab {
+        position: absolute;
+        left: 14px;
+        bottom: 14px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 42px;
+        height: 42px;
+        z-index: 6;
+        border: none;
+        overflow: visible;
+      }
+
+      #bgm-toggle-btn {
+        width: 34px;
+        height: 34px;
+        border-radius: 999px;
+        border: 1px solid rgba(148, 163, 184, 0.55);
+        background: rgba(255, 255, 255, 0.96);
+        color: #0f172a;
+        font-size: 16px;
+        line-height: 1;
+        cursor: pointer;
+      }
+
+      #bgm-toggle-btn[data-on="true"] {
+        border-color: #22c55e;
+        box-shadow: 0 0 0 1px rgba(34, 197, 94, 0.35) inset;
+      }
+
+      #bgm-volume-wrap {
+        position: absolute;
+        left: 50%;
+        bottom: 42px;
+        padding: 8px 6px;
+        border: 1px solid rgba(148, 163, 184, 0.55);
+        border-radius: 10px;
+        background: rgba(255, 255, 255, 0.96);
+        opacity: 0;
+        pointer-events: none;
+        transform: translate(-50%, 6px);
+        transition: opacity 0.15s ease, transform 0.15s ease;
+      }
+
+      #audio-fab::before {
+        content: "";
+        position: absolute;
+        left: 0;
+        bottom: 42px;
+        width: 42px;
+        height: 10px;
+      }
+
+      #audio-fab:hover #bgm-volume-wrap,
+      #audio-fab:focus-within #bgm-volume-wrap {
+        opacity: 1;
+        pointer-events: auto;
+        transform: translate(-50%, 0);
+      }
+
+      #bgm-volume {
+        width: 10px;
+        height: 74px;
+        accent-color: #22c55e;
+        writing-mode: bt-lr;
+        -webkit-appearance: slider-vertical;
+      }
+
+      #preview-panel {
+        position: absolute;
+        top: 12px;
+        right: 12px;
+        z-index: 3;
+        display: grid;
+        gap: 10px;
+      }
+
+      .preview-box {
+        border: 1px solid rgba(148, 163, 184, 0.45);
+        background: rgba(255, 255, 255, 0.92);
+        border-radius: 10px;
+        padding: 8px;
+        width: fit-content;
+      }
+
+      .preview-title {
+        font-size: 12px;
+        margin: 0 0 6px 0;
+        opacity: 0.9;
+        color: #334155;
+      }
+
+      .preview-box canvas {
+        display: block;
+        width: 94px;
+        height: 94px;
+      }
+
+      #game-over {
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        transform: translate(-50%, -50%);
+        padding: 20px;
+        border: 1px solid rgba(148, 163, 184, 0.6);
+        background: rgba(255, 255, 255, 0.98);
+        border-radius: 12px;
+        text-align: center;
+        z-index: 4;
+        display: none;
+        min-width: 220px;
+        color: #0f172a;
+      }
+
+      #pause-overlay {
+        position: absolute;
+        inset: 0;
+        z-index: 5;
+        display: none;
+        place-items: center;
+        pointer-events: none;
+        background: rgba(255, 255, 255, 0.45);
+      }
+
+      #pause-card {
+        min-width: 220px;
+        padding: 18px 26px;
+        border-radius: 14px;
+        border: 2px solid rgba(251, 191, 36, 0.7);
+        background: rgba(255, 255, 255, 0.95);
+        box-shadow: 0 12px 30px rgba(30, 41, 59, 0.2);
+        font-size: 32px;
+        font-weight: 900;
+        letter-spacing: 2px;
+        color: #0f172a;
+        text-align: center;
+      }
+
+      #restart-btn {
+        margin-top: 12px;
+        border: 0;
+        border-radius: 8px;
+        padding: 10px 14px;
+        cursor: pointer;
+        font-weight: 700;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="app">
+      <div class="hill-mid" aria-hidden="true"></div>
+      <div id="hud">
+        <button id="start-btn" type="button">Start</button>
+        <select id="difficulty" aria-label="Difficulty">
+          <option value="easy">Easy</option>
+          <option value="normal" selected>Normal</option>
+          <option value="hard">Hard</option>
+        </select>
+        <div class="pill" id="score">Score: 0</div>
+        <div class="pill" id="lines">Lines: 0</div>
+        <div class="pill" id="combo">Combo: 0</div>
+      </div>
+      <div id="preview-panel">
+        <div class="preview-box">
+          <p class="preview-title">Next</p>
+          <canvas id="next-piece" width="94" height="94"></canvas>
+        </div>
+        <div class="preview-box" id="next-extra-wrap">
+          <p class="preview-title">Next +1</p>
+          <canvas id="next-piece-extra" width="94" height="94"></canvas>
+        </div>
+      </div>
+      <div id="game-over">
+        <h2>Game Over</h2>
+        <p id="final-score"></p>
+        <button id="restart-btn" type="button">Restart</button>
+      </div>
+      <div id="pause-overlay">
+        <div id="pause-card">PAUSE</div>
+      </div>
+      <div id="audio-fab">
+        <button id="bgm-toggle-btn" type="button" data-on="true" aria-label="Toggle BGM">&#128266;</button>
+        <div id="bgm-volume-wrap">
+          <input id="bgm-volume" type="range" min="0" max="100" step="1" value="55" />
+        </div>
+      </div>
+    </div>
+    <script type="module" src="/src/main.ts"></script>
+  </body>
+</html>
